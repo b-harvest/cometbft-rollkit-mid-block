@@ -68,7 +68,6 @@ func (m *Txs) GetTxs() [][]byte {
 
 type Message struct {
 	// Types that are valid to be assigned to Sum:
-	//
 	//	*Message_Txs
 	Sum isMessage_Sum `protobuf_oneof:"sum"`
 }
@@ -371,7 +370,10 @@ func (m *Txs) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
@@ -456,7 +458,10 @@ func (m *Message) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if (iNdEx + skippy) > l {
