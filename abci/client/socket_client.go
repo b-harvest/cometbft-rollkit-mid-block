@@ -292,6 +292,11 @@ func (cli *socketClient) GenerateFraudProofAsync(
 ) *ReqRes {
 	return cli.queueRequest(types.ToRequestGenerateFraudProof(req))
 }
+func (cli *socketClient) VerifyFraudProofAsync(
+	req types.RequestVerifyFraudProof,
+) *ReqRes {
+	return cli.queueRequest(types.ToRequestVerifyFraudProof(req))
+}
 
 //----------------------------------------
 
