@@ -1,7 +1,7 @@
 package abcicli
 
 import (
-	types "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/service"
 	cmtsync "github.com/tendermint/tendermint/libs/sync"
 )
@@ -149,6 +149,17 @@ func (app *localClient) BeginBlockAsync(req types.RequestBeginBlock) *ReqRes {
 	return app.callback(
 		types.ToRequestBeginBlock(req),
 		types.ToResponseBeginBlock(res),
+	)
+}
+
+func (app *localClient) MidBlockAsync(req types.RequestMidBlock) *ReqRes {
+	app.mtx.Lock()
+	defer app.mtx.Unlock()
+
+	res := app.Application.MidBlock(req)
+	return app.callback(
+		types.ToRequestMidBlock(req),
+		types.ToResponseMidBlock(res),
 	)
 }
 
@@ -311,6 +322,14 @@ func (app *localClient) BeginBlockSync(req types.RequestBeginBlock) (*types.Resp
 	defer app.mtx.Unlock()
 
 	res := app.Application.BeginBlock(req)
+	return &res, nil
+}
+
+func (app *localClient) MidBlockSync(req types.RequestMidBlock) (*types.ResponseMidBlock, error) {
+	app.mtx.Lock()
+	defer app.mtx.Unlock()
+
+	res := app.Application.MidBlock(req)
 	return &res, nil
 }
 

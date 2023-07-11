@@ -39,6 +39,7 @@ message Request {
     RequestGetAppHash         get_app_hash         = 16;
     RequestGenerateFraudProof generate_fraud_proof = 17;
     RequestVerifyFraudProof   verify_fraud_proof   = 18;
+    RequestMidBlock           mid_block            = 19;
   }
 }
 
@@ -82,6 +83,10 @@ message RequestBeginBlock {
   tendermint.types.Header header               = 2 [(gogoproto.nullable) = false];
   LastCommitInfo          last_commit_info     = 3 [(gogoproto.nullable) = false];
   repeated Evidence       byzantine_validators = 4 [(gogoproto.nullable) = false];
+}
+
+message RequestMidBlock {
+  repeated bytes txs = 1;
 }
 
 enum CheckTxType {
@@ -167,6 +172,7 @@ message Response {
     ResponseGetAppHash         get_app_hash         = 17;
     ResponseGenerateFraudProof generate_fraud_proof = 18;
     ResponseVerifyFraudProof   verify_fraud_proof   = 19;
+    ResponseMidBlock           mid_block            = 20;
   }
 }
 
@@ -220,6 +226,12 @@ message ResponseQuery {
 
 message ResponseBeginBlock {
   repeated Event events = 1
+      [(gogoproto.nullable) = false, (gogoproto.jsontag) = "events,omitempty"];
+}
+
+message ResponseMidBlock {
+  repeated ResponseDeliverTx deliver_txs = 1;
+  repeated Event events = 2
       [(gogoproto.nullable) = false, (gogoproto.jsontag) = "events,omitempty"];
 }
 
@@ -483,4 +495,5 @@ service ABCIApplication {
   rpc GetAppHash(RequestGetAppHash) returns (ResponseGetAppHash);
   rpc GenerateFraudProof(RequestGenerateFraudProof) returns (ResponseGenerateFraudProof);
   rpc VerifyFraudProof(RequestVerifyFraudProof) returns (ResponseVerifyFraudProof);
+  rpc MidBlock(RequestMidBlock) returns (ResponseMidBlock);
 }

@@ -1,7 +1,7 @@
 package types
 
 import (
-	context "golang.org/x/net/context"
+	"golang.org/x/net/context"
 )
 
 // Application is an interface that enables any finite, deterministic state machine
@@ -23,6 +23,8 @@ type Application interface {
 	InitChain(RequestInitChain) ResponseInitChain
 	// Signals the beginning of a block
 	BeginBlock(RequestBeginBlock) ResponseBeginBlock
+	// Temporary deliver txs after begin block
+	MidBlock(RequestMidBlock) ResponseMidBlock
 	// Deliver a tx for full processing
 	DeliverTx(RequestDeliverTx) ResponseDeliverTx
 	// Signals the end of a block, returns changes to the validator set
@@ -90,6 +92,17 @@ func (BaseApplication) InitChain(req RequestInitChain) ResponseInitChain {
 
 func (BaseApplication) BeginBlock(req RequestBeginBlock) ResponseBeginBlock {
 	return ResponseBeginBlock{}
+}
+
+func (BaseApplication) MidBlock(req RequestMidBlock) ResponseMidBlock {
+	txs := make([]*ResponseDeliverTx, len(req.Txs))
+	for i := range req.Txs {
+		txs[i] = &ResponseDeliverTx{Code: CodeTypeOK}
+	}
+
+	return ResponseMidBlock{
+		DeliverTxs: txs,
+	}
 }
 
 func (BaseApplication) EndBlock(req RequestEndBlock) ResponseEndBlock {
@@ -180,6 +193,11 @@ func (app *GRPCApplication) InitChain(ctx context.Context, req *RequestInitChain
 
 func (app *GRPCApplication) BeginBlock(ctx context.Context, req *RequestBeginBlock) (*ResponseBeginBlock, error) {
 	res := app.app.BeginBlock(*req)
+	return &res, nil
+}
+
+func (app *GRPCApplication) MidBlock(ctx context.Context, req *RequestMidBlock) (*ResponseMidBlock, error) {
+	res := app.app.MidBlock(*req)
 	return &res, nil
 }
 
