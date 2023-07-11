@@ -653,6 +653,48 @@ func (_m *Client) QuerySync(_a0 types.RequestQuery) (*types.ResponseQuery, error
 	return r0, r1
 }
 
+func (_m *Client) GetAppHashAsync(_a0 types.RequestGetAppHash) *abcicli.ReqRes {
+	ret := _m.Called(_a0)
+
+	var r0 *abcicli.ReqRes
+	if rf, ok := ret.Get(0).(func(types.RequestGetAppHash) *abcicli.ReqRes); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*abcicli.ReqRes)
+		}
+	}
+	return r0
+}
+
+func (_m *Client) GenerateFraudProofAsync(_a0 types.RequestGenerateFraudProof) *abcicli.ReqRes {
+	ret := _m.Called(_a0)
+
+	var r0 *abcicli.ReqRes
+	if rf, ok := ret.Get(0).(func(types.RequestGenerateFraudProof) *abcicli.ReqRes); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*abcicli.ReqRes)
+		}
+	}
+	return r0
+}
+
+func (_m *Client) VerifyFraudProofAsync(_a0 types.RequestVerifyFraudProof) *abcicli.ReqRes {
+	ret := _m.Called(_a0)
+
+	var r0 *abcicli.ReqRes
+	if rf, ok := ret.Get(0).(func(types.RequestVerifyFraudProof) *abcicli.ReqRes); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*abcicli.ReqRes)
+		}
+	}
+	return r0
+}
+
 // GetAppHashSync provides a mock function with given fields: _a0
 func (_m *Client) GetAppHashSync(_a0 types.RequestGetAppHash) (*types.ResponseGetAppHash, error) {
 	ret := _m.Called(_a0)
